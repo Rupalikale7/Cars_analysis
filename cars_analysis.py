@@ -4,7 +4,7 @@ import seaborn as sb
 import matplotlib.pyplot as plt
 
 # Load dataset
-df = pd.read_csv("CARS.csv")
+df = pd.read_csv("../Dataset.CARS.csv")
 
 # Clean data
 df["MSRP"] = df["MSRP"].replace('[$ ,]', '', regex=True).astype('int64')

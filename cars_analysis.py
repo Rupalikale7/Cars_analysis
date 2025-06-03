@@ -9,7 +9,7 @@ st.title("Car Dataset Analysis")
 # Load the dataset
 @st.cache_data
 def load_data():
-    df = pd.read_csv("../Dataset/CARS.csv")
+    df = pd.read_csv("CARS.csv")
     df['MSRP'] = df['MSRP'].replace('[$ ,]', '', regex=True).astype('int64')
     df['Invoice'] = df['Invoice'].replace('[$ ,]', '', regex=True).astype('int64')
     return df

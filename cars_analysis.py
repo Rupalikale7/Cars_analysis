@@ -1,35 +1,38 @@
 import streamlit as st
 import pandas as pd
-import seaborn as sb
 import matplotlib.pyplot as plt
+import seaborn as sb
 
-# Load dataset
-df = pd.read_csv("../Dataset.CARS.csv")
+# Page title
+st.title("Car Dataset Analysis")
 
-# Clean data
-df["MSRP"] = df["MSRP"].replace('[$ ,]', '', regex=True).astype('int64')
-df["Invoice"] = df["Invoice"].replace('[$ ,]', '', regex=True).astype('int64')
+# Load the dataset
+@st.cache_data
+def load_data():
+    df = pd.read_csv("../Dataset/CARS.csv")
+    df['MSRP'] = df['MSRP'].replace('[$ ,]', '', regex=True).astype('int64')
+    df['Invoice'] = df['Invoice'].replace('[$ ,]', '', regex=True).astype('int64')
+    return df
 
-# Sidebar for user input
-st.title("Car Price Analysis")
+df = load_data()
 
-# Select Type
-types = df["Type"].unique()
+# Car type selection
+types = df['Type'].unique()
 selected_type = st.selectbox("Select Car Type", types)
 
 # Filter by selected type
-filtered_type_df = df[df["Type"] == selected_type]
+typ = df[df['Type'] == selected_type]
 
-# Show available origins
-origins = filtered_type_df["Origin"].unique()
+# Origin selection
+origins = typ['Origin'].unique()
 selected_origin = st.selectbox("Select Car Origin", origins)
 
-# Final filtered DataFrame
-final_df = filtered_type_df[filtered_type_df["Origin"] == selected_origin]
+# Filter by selected origin
+orii = typ[typ['Origin'] == selected_origin]
 
 # Plot
-st.subheader(f"MSRP Distribution for {selected_type} cars from {selected_origin}")
+st.subheader(f"MSRP for {selected_type} cars from {selected_origin}")
 fig, ax = plt.subplots()
-sb.barplot(x=final_df["Type"], y=final_df["MSRP"], ax=ax)
+sb.barplot(x=orii['Type'], y=orii['MSRP'], ax=ax)
 plt.xticks(rotation=90)
 st.pyplot(fig)
